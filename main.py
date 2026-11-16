@@ -19,3 +19,8 @@ def parse_data(file_path, encoding = "utf-8-sig"):
                 column: value.strip()
                 for column, value in row.items()
             }
+
+
+# for car in parse_data("data/reestrtz31.12.2025.csv"):
+#     plate = car["N_REG_NEW"]  # Наприклад: АХ1312КК
+#     # score = calculate_score(plate)
