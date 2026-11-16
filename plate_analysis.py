@@ -210,4 +210,4 @@ def analyze_regions(file_path: str, encoding: str = "utf-8-sig") -> dict:
         "regions": regions,
     }
 
-import json
+
