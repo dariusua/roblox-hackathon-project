@@ -4,7 +4,6 @@ digit_score, main_reason = max(
     )
     reasons = [main_reason]
 
-    # Суб'єктивні ваги проєкту: можна змінювати після демо.
     digit_preferences = {
         "0": 1,
         "1": 8,
@@ -44,7 +43,6 @@ digit_score, main_reason = max(
 
     meme_bonus = min(meme_bonus, 25)
 
-    # Рахуємо привабливість літер окремо від цифр.
     letter_bonus = 0
 
     if len(set(letters)) == 1:
@@ -67,16 +65,12 @@ digit_score, main_reason = max(
         letter_bonus += 4
         reasons.append("Додатковий бонус серії AA…AA")
 
-    # Структурний максимум правил — 100, без обрізання оцінки.
     score = digit_score + preference_bonus + meme_bonus + letter_bonus
 
     mvs_price = get_mvs_price(digits)
 
-    # Для комбінацій без спеціального тарифу беремо умовну базу.
     base_price = mvs_price if mvs_price is not None else 1000
 
-    # Різні оцінки й літери дають різні умовні ціни
-    # навіть за однакового офіційного тарифу.
     estimated_price = round(
         base_price
         * (1 + score / 100)
