@@ -1,38 +1,21 @@
-import pandas as pd
+import csv
+from collections.abc import Iterator
 
-# Крок 1: Завантаження даних
-def load_data(file_path):
-    data = pd.read_csv(file_path, sep=';', encoding='utf-8')
-    return data
 
-# Крок 2: Основні функції для обробки даних
-def filter_by_region(data, region_koatuu):
-    filtered_data = data[data['REG_ADDR_KOATUU'] == region_koatuu]
-    return filtered_data
+def parse_data(file_path, encoding = "utf-8-sig"):
+    with open(file_path, encoding=encoding, newline="") as file:
+        reader = csv.DictReader(file, delimiter=";", strict=True)
 
-def analyze_vehicle_data(data):
-    summary = data.groupby(['MAKE_YEAR', 'BRAND']).agg({
-        'VIN': 'count',
-        'COLOR': pd.Series.nunique,
-        'KIND': pd.Series.nunique,
-    }).reset_index()
-    return summary
+        if not reader.fieldnames or "N_REG_NEW" not in reader.fieldnames:
+            raise ValueError("У CSV немає колонки N_REG_NEW.")
 
-# Крок 3: Головна функція
-def main():
-    # Завантаження даних
-    file_path = 'path/to/your/data.csv'  # Заміна на фактичний шлях до файлу
-    data = load_data(file_path)
-    
-    # Приклад фільтрації по регіону
-    region_koatuu = '6310138200'  # Заміна на бажаний код області
-    region_data = filter_by_region(data, region_koatuu)
-    
-    # Аналіз даних по автомобілям
-    vehicle_summary = analyze_vehicle_data(region_data)
-    
-    # Вивід результатів
-    print(vehicle_summary)
+        for row in reader:
+            if None in row or any(value is None for value in row.values()):
+                raise ValueError(
+                    f"Неправильна кількість полів біля рядка {reader.line_num}."
+                )
 
-if __name__ == "__main__":
-    main()
+            yield {
+                column: value.strip()
+                for column, value in row.items()
+            }
