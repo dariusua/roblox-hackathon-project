@@ -139,12 +139,12 @@ def show_region_statistics(region_name, stats):
             "Бал": plate["score"],
             "Умовна ціна, грн": plate["estimated_price_uah"],
         })
-      if rows:
-        st.dataframe(
-            pd.DataFrame(rows),
-            hide_index=True,
-            use_container_width=True,
-        )
+        if rows:
+            st.dataframe(
+                pd.DataFrame(rows),
+                hide_index=True,
+                use_container_width=True,
+            )
 
 
 def show_ukraine_map(result):
